@@ -4,12 +4,13 @@ import Header from './Header';
 import AddContact from './AddContact';
 import ContactList from './ContactList';
 import { v4 as uuidv4 } from 'uuid';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 function App() {
   const LOCAL_STORAGE_KEY = 'contacts';
   const [contacts, setContacts] = useState(() => {
-      const savedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
-      return savedContacts ? JSON.parse(savedContacts) : [];
+    const savedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return savedContacts ? JSON.parse(savedContacts) : [];
   });
 
   const addContactHandler = (contact) => {
@@ -30,9 +31,15 @@ function App() {
 
   return (
     <div className='ui container'>
-      <Header />
-      <AddContact addContactHandler={addContactHandler} />
-      <ContactList contacts={contacts} getContactId = {removeContactHandler}/>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path='/' Component={ContactList} />
+          <Route path='/add' Component={AddContact} />
+        </Routes>
+        {/* <AddContact addContactHandler={addContactHandler} />
+      <ContactList contacts={contacts} getContactId = {removeContactHandler}/> */}
+      </Router>
     </div>
   );
 }
