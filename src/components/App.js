@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import Header from './Header';
-import AddContact from './AddContact';
-import ContactList from './ContactList';
-import { v4 as uuidv4 } from 'uuid';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Header from "./Header";
+import AddContact from "./AddContact";
+import ContactList from "./ContactList";
+import { v4 as uuidv4 } from "uuid";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 function App() {
-  const LOCAL_STORAGE_KEY = 'contacts';
+  const LOCAL_STORAGE_KEY = "contacts";
   const [contacts, setContacts] = useState(() => {
     const savedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
     return savedContacts ? JSON.parse(savedContacts) : [];
@@ -16,11 +16,11 @@ function App() {
   const addContactHandler = (contact) => {
     console.log(contact);
     setContacts([...contacts, { id: uuidv4(), ...contact }]);
-  }
+  };
 
   const removeContactHandler = (id) => {
     const newContactList = contacts.filter((contact) => {
-      return contact.id !== id
+      return contact.id !== id;
     });
     setContacts(newContactList);
   };
@@ -30,12 +30,32 @@ function App() {
   }, [contacts]);
 
   return (
-    <div className='ui container'>
+    <div className="ui container">
       <Router>
         <Header />
         <Routes>
-          <Route path='/' Component={ContactList} />
-          <Route path='/add' Component={AddContact} />
+          <Route
+            path="/"
+            element={
+              <ContactList
+                contacts={contacts}
+                getContactId={removeContactHandler}
+              />
+            }
+          />
+          {/* Component={() => (
+              <ContactList
+                contacts={contacts}
+                getContactId={removeContactHandler}
+              />
+            )} */}
+          <Route
+            path="/add"
+            element={<AddContact addContactHandler={addContactHandler} />}
+            // Component={() => (
+            //   <AddContact addContactHandler={addContactHandler} />
+            // )}
+          />
         </Routes>
         {/* <AddContact addContactHandler={addContactHandler} />
       <ContactList contacts={contacts} getContactId = {removeContactHandler}/> */}
